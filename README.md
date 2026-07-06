@@ -11,6 +11,44 @@ Both modes coexist — pick per project. Commands are transparently routed to th
 
 ---
 
+## Quick install (one script per machine)
+
+Two scripts automate the whole setup — one per machine. Both offer an optional
+**Tailscale** step (handled by `install/tailscale.sh`) for remotes behind NAT /
+CGNAT / IPv6-only — see [Connectivity](#connectivity) for the details it automates.
+
+**1 — On your LOCAL machine** (installs deps, offers Tailscale, generates an SSH key, writes `config.sh` + `~/.ssh/config`, creates the command symlinks, and prompts for the remote host):
+
+```bash
+git clone https://github.com/szl666/claude-server.git ~/Projects/claude-server
+cd ~/Projects/claude-server
+bash install/local.sh
+```
+
+It then pauses and prints a one-liner (containing your new public key) to run on the remote.
+
+**2 — On the REMOTE server** (enables the SSH server, installs the key, adds your toolchain to `~/.profile`):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/szl666/claude-server/main/install/remote.sh | bash -s -- '<pubkey that local.sh printed>'
+# add --tailscale to also install Tailscale on the remote:
+#   ... | bash -s -- '<pubkey>' --tailscale
+```
+
+> If the remote can't reach GitHub (e.g. a proxy is in the way), copy `install/remote.sh` to the box and run `bash remote.sh '<pubkey>'` instead.
+
+Back on the local machine, press Enter so `local.sh` verifies SSH and pre-installs the Mutagen agent. Done — then:
+
+```bash
+cd <local-project> && claude-remote     # Mode A: local project, runs on the server
+crfs /home/you/big-remote-project       # Mode B: server-side project, no local copy
+printf 'on\n' > ~/.claude-remote/mode   # turn remote routing on
+```
+
+The sections below document the same steps **manually** and explain each piece.
+
+---
+
 ## Architecture
 
 ```
