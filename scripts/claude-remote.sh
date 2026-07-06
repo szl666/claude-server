@@ -50,4 +50,4 @@ CR_SYSPROMPT="You are running in claude-remote 'remote offload' mode.
 - If a command unexpectedly seems to run locally, the mode file ~/.claude-remote/mode may be 'off'."
 
 # Launch Claude with remote shell
-SHELL="$SCRIPT_DIR/zsh" exec claude --dangerously-skip-permissions --append-system-prompt "$CR_SYSPROMPT" "$@"
+SHELL="$SCRIPT_DIR/zsh" exec claude --permission-mode auto --append-system-prompt "$CR_SYSPROMPT" "$@"

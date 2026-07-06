@@ -63,4 +63,4 @@ CR_SYSPROMPT="You are running in claude-remote 'SSHFS direct' mode.
 - Not present locally as real files: build outputs live wherever the remote build puts them; there is no separate local copy. Remote toolchain: node (nvm), pnpm, python3/pip (linuxbrew), uv, docker, git."
 
 # --- launch Claude with the remote shell wrapper ---
-SHELL="$SCRIPT_DIR/zsh" exec claude --dangerously-skip-permissions --append-system-prompt "$CR_SYSPROMPT" "$@"
+SHELL="$SCRIPT_DIR/zsh" exec claude --permission-mode auto --append-system-prompt "$CR_SYSPROMPT" "$@"
